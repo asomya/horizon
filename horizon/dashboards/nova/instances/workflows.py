@@ -388,6 +388,37 @@ class PostCreationStep(workflows.Step):
     contributes = ("customization_script",)
 
 
+class SetNetworkAction(workflows.Action):
+    network = forms.MultipleChoiceField(label=_("Networks"),
+                                        required=True,
+                                        initial=["default"],
+                                        widget=forms.SelectMultiple(),
+                                        help_text=_("Launch instance in these"
+                                                    "networks"))
+
+    class Meta:
+        name = _("Networking")
+        help_text = _("Select networks for your instance.")
+
+    def populate_network_choices(self, request, context):
+        try:
+            networks = api.quantum.network_list(request)
+            network_list = [(network.id, network.name) for network in networks]
+        except:
+            network_list = []
+            exceptions.handle(request,
+                              _('Unable to retrieve networks.'))
+        if not network_list:
+            network_list = (("", _("No networks available.")),)
+
+        return network_list
+
+
+class SetNetwork(workflows.Step):
+    action_class = SetNetworkAction
+    contributes = ("network_id",)
+
+
 class LaunchInstance(workflows.Workflow):
     slug = "launch_instance"
     name = _("Launch Instance")
@@ -398,6 +429,7 @@ class LaunchInstance(workflows.Workflow):
     default_steps = (SelectProjectUser,
                      SetInstanceDetails,
                      SetAccessControls,
+                     SetNetwork,
                      VolumeOptions,
                      PostCreationStep)
 

@@ -1,6 +1,10 @@
 # vim: tabstop=4 shiftwidth=4 softtabstop=4
 
-# Copyright 2012 Nebula, Inc.
+# Copyright 2012 United States Government as represented by the
+# Administrator of the National Aeronautics and Space Administration.
+# All Rights Reserved.
+#
+# Copyright 2012 Cisco Systems, Inc.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -17,31 +21,12 @@
 from django.utils.translation import ugettext_lazy as _
 
 import horizon
+from horizon.dashboards.nova import dashboard
 
 
-class BasePanels(horizon.PanelGroup):
-    slug = "compute"
-    name = _("Manage Compute")
-    panels = ('overview',
-              'instances',
-              'volumes',
-              'images_and_snapshots',
-              'access_and_security',
-              'networks')
+class Networks(horizon.Panel):
+    name = _("Networks")
+    slug = 'networks'
+    #services = ('network',)
 
-
-class ObjectStorePanels(horizon.PanelGroup):
-    slug = "object_store"
-    name = _("Object Store")
-    panels = ('containers',)
-
-
-class Nova(horizon.Dashboard):
-    name = _("Project")
-    slug = "nova"
-    panels = (BasePanels, ObjectStorePanels)
-    default_panel = 'overview'
-    supports_tenants = True
-
-
-horizon.register(Nova)
+dashboard.Nova.register(Networks)
