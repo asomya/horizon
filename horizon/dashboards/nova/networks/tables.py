@@ -53,11 +53,11 @@ def _get_subnets(network):
 
 
 class NetworksTable(tables.DataTable):
-    id = tables.Column("id", 
+    id = tables.Column("id",
                        verbose_name=_("Network Id"),
                        link='horizon:nova:networks:subnets:index')
     name = tables.Column("name", verbose_name=_("Network Name"))
-    subnets = tables.Column(_get_subnets, 
+    subnets = tables.Column(_get_subnets,
                             verbose_name=_("Subnets Associated"),)
 
     def get_object_id(self, network):

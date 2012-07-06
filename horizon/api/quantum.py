@@ -34,7 +34,7 @@ LOG = logging.getLogger(__name__)
 
 class Network(APIDictWrapper):
     """Wrapper for quantum Networks"""
-    _attrs= ['name', 'id', 'subnets']
+    _attrs = ['name', 'id', 'subnets']
 
 
 class Subnet(APIDictWrapper):
@@ -50,8 +50,10 @@ def network_list(request):
     networks = []
     return networks
 
+
 def network_get(request, network_id):
     pass
+
 
 def network_create(request, network_name):
     pass
